@@ -1,6 +1,7 @@
 import express from 'express';
 import { createSchema } from './src/schemas/createSchema.js';
 import { updateSchema } from './src/schemas/updateSchema.js';
+import { getProducts } from './src/controllers/productRead.js';
 
 const app = express();
 
@@ -30,8 +31,9 @@ app.put('/api/productos/:id' ,
 )
 
 app.get('/api/productos', 
-  (req, res)=>{
-    return res.json({ message: 'LISTAR PRODUCTOS' })
+  async (req, res)=>{
+    const data = await getProducts()
+    return res.json(data)
   }
 )
 
