@@ -34,7 +34,7 @@ const connectToDB = async () => {
 const disconnectFromDB = async () => {
   if(!connectionState) return
   try {
-    await mongooseconnection.close()
+    await mongoose.connection.close()
     connectionState = false
   } catch (error) {
     console.log("Error al desconectar de la base de datos")

@@ -2,6 +2,7 @@ import express from 'express';
 import { createSchema } from './src/schemas/createSchema.js';
 import { updateSchema } from './src/schemas/updateSchema.js';
 import { getProducts } from './src/controllers/productRead.js';
+import { productCreate } from './src/controllers/productCreate.js';
 
 const app = express();
 
@@ -12,7 +13,9 @@ app.post('/api/productos',
   async (req, res)=>{
     try {
       await createSchema.validateAsync(req.body)
-      return res.json({ message: `CREAR PRODUCTO ${req.body.name}` })
+      const { name, category, details, price, stock } = req.body
+      const result = await productCreate(name, category, details, price, stock)
+      return res.json(result)
     } catch (error) {
       return res.json(error)
     }
