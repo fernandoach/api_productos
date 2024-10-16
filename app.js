@@ -3,6 +3,7 @@ import { createSchema } from './src/schemas/createSchema.js';
 import { updateSchema } from './src/schemas/updateSchema.js';
 import { getProducts } from './src/controllers/productRead.js';
 import { productCreate } from './src/controllers/productCreate.js';
+import { productDelete } from './src/controllers/productDelete.js';
 
 const app = express();
 
@@ -25,8 +26,8 @@ app.post('/api/productos',
 app.put('/api/productos/:id' ,
   async (req, res)=>{
     try {
-      await updateSchema.validateAsync(req.body)
-      return res.json({ message: `ACTUALIZAR PRODUCTO ${req.params.id} - ${req.body.value}` })
+
+      return res.json({ message: `ACTUALIZAR PRODUCTO ${req.params.id} - ${req.body}` })
     } catch (error) {
       return res.json(error)
     }
@@ -41,8 +42,10 @@ app.get('/api/productos',
 )
 
 app.delete('/api/productos/:id', 
-  (req, res)=>{
-    return res.json({ message: `ELIMINAR PRODUCTO ${req.params. id}` })
+  async (req, res)=>{
+    const id = req.params.id
+    const result = await productDelete(id)
+    return res.json(result)
   }
 )
 
