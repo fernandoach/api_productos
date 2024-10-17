@@ -4,13 +4,19 @@ import { updateSchema } from './src/schemas/updateSchema.js';
 import { getProducts } from './src/controllers/productRead.js';
 import { productCreate } from './src/controllers/productCreate.js';
 import { productDelete } from './src/controllers/productDelete.js';
+import { productUpdate } from './src/controllers/productUpdate.js';
+import cors from 'cors'
 
 const app = express();
 
+const corsOptions = {
+  origin: ['http://localhost:3000', 'http://localhost:5500'],
+}
+
 app.use(express.json())
+app.use(cors())
 
-
-app.post('/api/productos', 
+app.post('/api/productos',  
   async (req, res)=>{
     try {
       await createSchema.validateAsync(req.body)
@@ -26,8 +32,11 @@ app.post('/api/productos',
 app.put('/api/productos/:id' ,
   async (req, res)=>{
     try {
-
-      return res.json({ message: `ACTUALIZAR PRODUCTO ${req.params.id} - ${req.body}` })
+      const id = req.params.id
+      const { name, category, details, price, stock } = req.body
+      await updateSchema.validateAsync({ name, category, details, price, stock })
+      const product = await productUpdate(id, name, category, details, price, stock)
+      return res.json({ message: `Actualización exitosa`, product })
     } catch (error) {
       return res.json(error)
     }
