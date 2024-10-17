@@ -9,9 +9,9 @@ import cors from 'cors'
 
 const app = express();
 
-const corsOptions = {
+/* const corsOptions = {
   origin: ['http://localhost:3000', 'http://localhost:5500'],
-}
+} */
 
 app.use(express.json())
 app.use(cors())
